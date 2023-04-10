@@ -21,12 +21,15 @@ class RectView(context: Context, attributeSet: AttributeSet) : View(context, att
     fun transformRect(results: ArrayList<Result>) {
         // scale 구하기
         val scaleX = width / DataProcess.INPUT_SIZE.toFloat()
-        val scaleY = height / DataProcess.INPUT_SIZE.toFloat()
+        val scaleY = scaleX * 9f / 16f
+        val realY = width * 9f / 16f
+        val diffY = realY - height
+
         results.forEach {
             it.rectF.left *= scaleX
             it.rectF.right *= scaleX
-            it.rectF.top *= scaleY
-            it.rectF.bottom *= scaleY
+            it.rectF.top = it.rectF.top * scaleY - (diffY / 2f)
+            it.rectF.bottom = it.rectF.bottom * scaleY - (diffY / 2f)
         }
         this.results = results
     }
