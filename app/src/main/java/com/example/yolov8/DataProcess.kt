@@ -8,6 +8,8 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStreamReader
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import java.util.*
 import kotlin.math.max
@@ -32,8 +34,10 @@ class DataProcess(val context: Context) {
 
     fun bitmapToFloatBuffer(bitmap: Bitmap): FloatBuffer {
         val imageSTD = 255.0f
-        val buffer = FloatBuffer.allocate(BATCH_SIZE * PIXEL_SIZE * INPUT_SIZE * INPUT_SIZE)
-        buffer.rewind()
+
+        val cap = BATCH_SIZE * PIXEL_SIZE * INPUT_SIZE * INPUT_SIZE
+        val order = ByteOrder.nativeOrder()
+        val buffer = ByteBuffer.allocateDirect(cap * Float.SIZE_BYTES).order(order).asFloatBuffer()
 
         val area = INPUT_SIZE * INPUT_SIZE
         val bitmapData = IntArray(area) //한 사진에서 대한 정보, 640x640 사이즈
